@@ -1,0 +1,49 @@
+#!/usr/bin/python3
+""" checks p and q to be prime numbers """
+
+import math
+
+def is_prime(n):
+    """ function to check if theyre prime """	
+    if n <= 1:
+        return False
+    if n <= 3:
+        return True
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+    return True
+
+def get_factor(num):
+    """ squares num to get the factor """
+    squ = int(math.sqrt(num))
+    for m in range(2, squ + 1):
+        if num % m == 0 and is_prime(m) and is_prime(num // m):
+            return m
+    return -1
+
+def main(file_name):
+    """ open the file containing num """
+    try:
+        with open(file_name, 'r') as file:
+            for line in file:
+                num = int(line.strip())
+                get_num = get_factor(num)
+                if get_num != -1:
+                    fac = num // get_num
+                    print(f"{num}={fac}*{get_num}")
+                else:
+                    print(f"No prime factor pairs found for the {num}")
+    except FileNotFoundError:
+        print(f"can't open file {file_name}")
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 2:
+        print("please include the file name")
+        sys.exit(1)
+    main(sys.argv[1])
